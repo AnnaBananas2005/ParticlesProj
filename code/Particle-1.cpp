@@ -1,4 +1,4 @@
-#include "Particle.h"
+#include "Particle-2.h"
 
 
 bool Particle::almostEqual(double a, double b, double eps)
@@ -143,4 +143,5 @@ void Particle::unitTests()
     }
 
     cout << "Score: " << score << " / 7" << endl;
+
 }
