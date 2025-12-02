@@ -6,7 +6,6 @@
 #include <SFML/System/Time.hpp>
 using namespace sf;
 using namespace std;
-//Done by Fernanda :D
 
 RenderWindow m_Window;
 vector<Particle> m_particles;
@@ -20,7 +19,6 @@ Engine::Engine()
     VertexArray vertices(Points);
 
     m_Window.create(VideoMode(screenWidth, screenHeight), "P A R T I C L E S");
-    //End of Anna's Contribution
 
 }
 
@@ -102,3 +100,4 @@ void Engine::draw()
     }
     m_Window.display();
 }
+
