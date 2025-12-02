@@ -12,7 +12,6 @@ vector<Particle> m_particles;
 
 Engine::Engine()
 {
-    //Anna's part
     unsigned int screenWidth = VideoMode::getDesktopMode().width / 2;
     unsigned int screenHeight = VideoMode::getDesktopMode().height / 2;
 
@@ -100,4 +99,5 @@ void Engine::draw()
     }
     m_Window.display();
 }
+
 
