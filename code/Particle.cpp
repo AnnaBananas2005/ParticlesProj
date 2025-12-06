@@ -5,8 +5,7 @@
 using namespace sf;
 using namespace std;
 
-
-Particle::Particle(RenderTarget& target, int numPoints, Vector2i mouseClickPosition) : m_A(2, numPoints) { 
+Particle::Particle(RenderTarget& target, int numPoints, Vector2i mouseClickPosition) : m_A(2, numPoints) {
     m_ttl = TTL;
     m_numPoints = numPoints;
     float randomNumber = static_cast<float>(rand()) / (RAND_MAX);
@@ -17,20 +16,22 @@ Particle::Particle(RenderTarget& target, int numPoints, Vector2i mouseClickPosit
     m_cartesianPlane.setSize(target.getSize().x, -1.0 * target.getSize().y);
     m_centerCoordinate = target.mapPixelToCoords(mouseClickPosition, m_cartesianPlane);
 
-    m_vx = m_vx = (rand() % 401 + 100) * (rand()% 2 ? 1 : -1); //:D
+    m_vx = (rand() % 401 + 100) * (rand()% 2 ? 1 : -1);
     m_vy = rand() % 401 + 100;
 
     m_color1 = Color::White;
     m_color2 = Color(rand() % 256, rand() % 256, rand() % 256);
 
-    float theta = static_cast<float>(rand()) / RAND_MAX * (M_PI / 2);
-    float dTheta = 2 * M_PI / (numPoints - 1);
-    float r, dx, dy;
+    double theta = (rand() / (double)RAND_MAX) * (M_PI / 2);
+    double dTheta = (2 * M_PI) / (numPoints - 1);
+    double r, dx, dy;
 
     for (int j = 0; j < numPoints; j++) {
-        r = static_cast<float>(rand() % 21 + 20); //20-40 (61 + 20) for 20-80
-        dx = static_cast<float>(r * cos(theta));            
-        dy = static_cast<float>(r * sin(theta));
+        r = rand() % (80 - 20 + 1);
+
+        dx = r * cos(theta);
+        dy = r * sin(theta);
+
         m_A(0, j) = m_centerCoordinate.x + dx;
         m_A(1, j) = m_centerCoordinate.y + dy;
         theta += dTheta;
@@ -45,8 +46,7 @@ void Particle::draw(RenderTarget& target, RenderStates states) const {
     lines[0].color = m_color1;
 
     for (int j = 1; j <= m_numPoints; j++) {
-        lines[j].position = static_cast<Vector2f>(target.mapCoordsToPixel(Vector2f(m_A(0, j - 1), m_A(1, j - 1)), m_cartesianPlane)); 
-
+        lines[j].position = static_cast<Vector2f>(target.mapCoordsToPixel(Vector2f(m_A(0, j - 1), m_A(1, j - 1)), m_cartesianPlane));
         lines[j].color = m_color2;
     }
     target.draw(lines, states);
@@ -68,13 +68,14 @@ void Particle::update(float dt) {
 void Particle::translate(double xShift, double yShift) {
     TranslationMatrix T(xShift, yShift, m_A.getCols());
     m_A = m_A + T;
-    m_centerCoordinate.x += static_cast<float>(xShift);
-    m_centerCoordinate.y += static_cast<float>(yShift);
+    m_centerCoordinate.x += xShift;
+    m_centerCoordinate.y += yShift;
 }
 
 void Particle::rotate(double theta) {
     Vector2f temp = m_centerCoordinate;
-    translate(-temp.x, -temp.y);
+    translate(-m_centerCoordinate.x, -m_centerCoordinate.y);
+
     RotationMatrix R(theta);
     m_A = R * m_A;
     translate(temp.x, temp.y);
@@ -83,10 +84,9 @@ void Particle::rotate(double theta) {
 
 void Particle::scale(double c) {
     Vector2f temp = m_centerCoordinate;
-    translate(-temp.x, -temp.y);
+    translate(-m_centerCoordinate.x, -m_centerCoordinate.y);
     ScalingMatrix S(c);
     m_A = S * m_A;
     translate(temp.x, temp.y);
 
 }
-
