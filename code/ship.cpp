@@ -1,0 +1,76 @@
+#include "../../ParticlesProjVS/code/Ship.h"
+#include <iostream>
+
+Ship::Ship() {
+	m_Speed = START_SPEED;
+	m_Health = START_HEALTH;
+	m_MaxHealth = START_HEALTH;
+
+	if (m_Texture.loadFromFile("fullHealth.png")) {
+		m_Sprite.setTexture(m_Texture);
+		m_Sprite.setOrigin(24, 24);
+	}
+	else
+		std::cout << "FAILED TO LOAD TEXTURE" << std::endl;
+
+	m_Texture.loadFromFile("fullHealth.png");
+}
+
+void Ship::spawn(IntRect spaceArena, Vector2f resolution) {
+	m_Position.x = spaceArena.width / 2;
+	m_Position.y = spaceArena.height / 2;
+
+	m_Arena.left = spaceArena.left;
+	m_Arena.width = spaceArena.width;
+	m_Arena.top = spaceArena.top;
+	m_Arena.height = spaceArena.height;
+	m_Resolution.x = resolution.x;
+	m_Resolution.y = resolution.y;
+
+}
+
+FloatRect Ship::getPosition() {
+	return m_Sprite.getGlobalBounds();
+}
+Vector2f Ship::getCenter() {
+	return m_Position;
+}
+float Ship::getRotation() {
+	return m_Sprite.getRotation();
+}
+
+Sprite Ship::getSprite() {
+	return m_Sprite;
+}
+
+void Ship::update(float elapsedTime, Vector2i mousePosition) {
+	if (m_UpPressed) {
+		m_Position.y -= m_Speed * elapsedTime;
+	}
+	if (m_DownPressed) {
+		m_Position.y += m_Speed * elapsedTime;
+	}
+	if (m_RightPressed) {
+		m_Position.x += m_Speed * elapsedTime;
+	}
+	if (m_LeftPressed) {
+		m_Position.x -= m_Speed * elapsedTime;
+	}
+	m_Sprite.setPosition(m_Position);
+	if (m_Position.x > m_Arena.width) {
+		m_Position.x = m_Arena.width; 
+	}
+	if (m_Position.x < m_Arena.left) {
+		m_Position.x = m_Arena.left; 
+	}
+	if (m_Position.y > m_Arena.height) {
+		m_Position.y = m_Arena.height;
+	}
+	if (m_Position.y < m_Arena.top) {
+		m_Position.y = m_Arena.top;
+	}
+	float angle = atan2(mousePosition.y - m_Position.y, mousePosition.x - m_Position.x) * 180 / 3.14159265f;
+	angle += 90.0; //cursor was off initially
+
+	m_Sprite.setRotation(angle);
+}
