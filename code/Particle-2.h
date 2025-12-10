@@ -2,7 +2,12 @@
 #include "Matrices-5.h"
 #include <SFML/Graphics.hpp>
 
+//needed on some platforms, on others M_PI is already defined
+//i do this so i dont get the same redefinition warning five times per compilation on linux
+#ifndef M_PI
 #define M_PI 3.1415926535897932384626433
+#endif
+
 const float G = 1000;      //Gravity
 const float TTL = 5.0;  //Time To Live
 const float SCALE = 0.999;
@@ -45,4 +50,5 @@ private:
     ///construct a TranslationMatrix T, add it to m_A
     void translate(double xShift, double yShift);
 };
+
 
