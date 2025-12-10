@@ -6,7 +6,7 @@ OBJ_FILES := $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o,$(SRC_FILES))
 
 LDFLAGS := -L/opt/homebrew/lib -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
 CXXFLAGS := -g -Wall -fpermissive -std=c++17 -I/opt/homebrew/include
-TARGET := Mandelbrot
+TARGET := Particles
 
 $(TARGET): $(OBJ_FILES)
 	g++ -o $@ $^ $(LDFLAGS)
