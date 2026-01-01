@@ -2,9 +2,6 @@
 #include <iostream>
 
 Ship::Ship() {
-	m_Speed = START_SPEED;
-	m_Health = START_HEALTH;
-	m_MaxHealth = START_HEALTH;
 
 	if (m_Texture.loadFromFile("fullHealth.png")) {
 		m_Sprite.setTexture(m_Texture);
@@ -44,18 +41,7 @@ Sprite Ship::getSprite() {
 }
 
 void Ship::update(float elapsedTime, Vector2i mousePosition) {
-	if (m_UpPressed) {
-		m_Position.y -= m_Speed * elapsedTime;
-	}
-	if (m_DownPressed) {
-		m_Position.y += m_Speed * elapsedTime;
-	}
-	if (m_RightPressed) {
-		m_Position.x += m_Speed * elapsedTime;
-	}
-	if (m_LeftPressed) {
-		m_Position.x -= m_Speed * elapsedTime;
-	}
+	
 	m_Sprite.setPosition(m_Position);
 	if (m_Position.x > m_Arena.width) {
 		m_Position.x = m_Arena.width; 
